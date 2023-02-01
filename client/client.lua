@@ -4,45 +4,76 @@ ESX = exports["es_extended"]:getSharedObject()
 
 local zeit = 0
 local soundid = GetSoundId()
+if not Config.target then 
+    Citizen.CreateThread(function()
 
-Citizen.CreateThread(function()
+        for __, s in ipairs(Config.Bells) do
 
-    for __, s in ipairs(Config.Bells) do
+            function onExit(self)
+                lib.hideTextUI()
+            end
+            
+            function insideZone(self)
 
-        function onExit(self)
-            lib.hideTextUI()
-        end
-        
-        function insideZone(self)
+                if zeit <= 0 then
 
-            if zeit <= 0 then
+                    lib.showTextUI(Config.Ring)
 
-                lib.showTextUI(Config.Ring)
+                    if IsControlJustReleased(0,  38) then
+                        TriggerServerEvent('es_doorbell:NotifyJob', s.job)
+                        zeit = Config.WaitingTime
+                        TriggerEvent("es_doorbell:startwaittime")
+                    end
 
-                if IsControlJustReleased(0,  38) then
-                    TriggerServerEvent('es_doorbell:NotifyJob', s.job)
-                    zeit = Config.WaitingTime
-                    TriggerEvent("es_doorbell:startwaittime")
+                elseif zeit >= 0 and zeit <= Config.WaitingTime then
+
+                    lib.showTextUI(Config.Wait1 ..zeit.. Config.Wait2)
+
                 end
-
-            elseif zeit >= 0 and zeit <= Config.WaitingTime then
-
-                lib.showTextUI(Config.Wait1 ..zeit.. Config.Wait2)
 
             end
 
+            local box = lib.zones.box({
+                coords = s.coords,
+                size = vec3(1, 1, 2),
+                inside = insideZone,
+                onExit = onExit
+            })
+
         end
 
-        local box = lib.zones.box({
+    end)
+elseif Config.target then
+    for __, s in ipairs(Config.Bells) do
+        
+
+        exports.ox_target:addSphereZone({
             coords = s.coords,
-            size = vec3(1, 1, 2),
-            inside = insideZone,
-            onExit = onExit
+            radius = 2,
+            debug = true,
+            options = {
+                {
+                    icon = 'fa-solid fa-circle',
+                    label = Config.Ring .. s.job,
+                    distance = 1.5,
+                    onSelect = function(data)
+                        if zeit <= 0 then
+                            TriggerServerEvent('es_doorbell:NotifyJob', s.job)
+                            zeit = Config.WaitingTime
+                            TriggerEvent("es_doorbell:startwaittime")
+                        elseif zeit >= 0 and zeit <= Config.WaitingTime then
+                            lib.notify({
+                                id = 'odota',
+                                title = Config.Wait1 ..zeit.. Config.Wait2,
+                                type = 'error'
+                            })
+                        end
+                    end
+                }
+            }
         })
-
     end
-
-end)
+end
 
 RegisterNetEvent("es_doorbell:startwaittime")
 AddEventHandler("es_doorbell:startwaittime", function()
