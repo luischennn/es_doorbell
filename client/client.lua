@@ -50,11 +50,11 @@ elseif Config.target then
         exports.ox_target:addSphereZone({
             coords = s.coords,
             radius = 2,
-            debug = true,
+            debug = false,
             options = {
                 {
-                    icon = 'fa-solid fa-circle',
-                    label = Config.Ring .. s.job,
+                    icon = 'fa-sharp fa-solid fa-bell',
+                    label = Config.targetRing .. ' ' .. s.label,
                     distance = 1.5,
                     onSelect = function(data)
                         if zeit <= 0 then
