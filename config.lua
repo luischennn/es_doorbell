@@ -10,6 +10,7 @@ Config.targetRing = 'Ring'
 Config.Wait1 = "Wait another "
 Config.Wait2 = " seconds"
 
+-- activate if u wanna use ox_target
 Config.target = true
 
 -- // SETTINGS //
