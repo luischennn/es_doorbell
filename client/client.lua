@@ -1,10 +1,26 @@
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- ESX Import
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+
 ESX = exports["es_extended"]:getSharedObject()
+
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- Debug Logs
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+local filename = function()
+    local str = debug.getinfo(2, "S").source:sub(2)
+    return str:match("^.*/(.*).lua$") or str
+end
+print("[CLIENT - DEBUG] : " .. filename() .. ".lua gestartet");
+
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- Code
+-- ════════════════════════════════════════════════════════════════════════════════════ --
 
 -- // Zone
 
 local zeit = 0
-local soundid = GetSoundId()
-if not Config.target then 
+if not Config.target then
     Citizen.CreateThread(function()
 
         for __, s in ipairs(Config.Bells) do
@@ -12,7 +28,7 @@ if not Config.target then
             function onExit(self)
                 lib.hideTextUI()
             end
-            
+
             function insideZone(self)
 
                 if zeit <= 0 then
@@ -45,7 +61,7 @@ if not Config.target then
     end)
 elseif Config.target then
     for __, s in ipairs(Config.Bells) do
-        
+
 
         exports.ox_target:addSphereZone({
             coords = s.coords,
@@ -82,3 +98,15 @@ AddEventHandler("es_doorbell:startwaittime", function()
         zeit = zeit - 1
     end
 end)
+
+
+---@param FileName string
+---@param Volume string
+---@return nil
+function PlayNUISound(FileName, Volume)
+    SendNUIMessage({
+        Type = "playSound",
+        File = FileName or "",
+        Volume = Volume or 1
+    })
+end
