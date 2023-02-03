@@ -5,6 +5,13 @@ lua54 'yes'
 author 'ElmoScripting'
 version '1.0 OX'
   
+ui_page('html/index.html')
+
+files({
+  'html/index.html',
+	'html/sounds/*.ogg',
+})
+
 shared_scripts {
   '@ox_lib/init.lua',
   '@es_extended/imports.lua',
