@@ -24,8 +24,8 @@ AddEventHandler('es_doorbell:NotifyJob', function(job)
     for key, source in pairs(xPlayers) do
         ::xPlayer_nil::
         local xPlayer = ESX.GetPlayerFromId(source)
-        -- Check if xPlayer is nil (e.g. if player just joined the Server)
         Citizen.Wait(10)
+        -- Check if xPlayer is nil (e.g. if player just joined the Server)
         if xPlayer == nil then 
             goto xPlayer_nil 
         end
