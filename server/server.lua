@@ -22,9 +22,13 @@ RegisterNetEvent('es_doorbell:NotifyJob')
 AddEventHandler('es_doorbell:NotifyJob', function(job)
     local xPlayers = ESX.GetPlayers()
     for key, source in pairs(xPlayers) do
+        ::xPlayer_nil::
         local xPlayer = ESX.GetPlayerFromId(source)
         -- Check if xPlayer is nil (e.g. if player just joined the Server)
-        repeat Citizen.Wait(10) xPlayer = ESX.GetPlayerFromId(source) until xPlayer ~= nil 
+        Citizen.Wait(10)
+        if xPlayer == nil then 
+            goto xPlayer_nil 
+        end
         SendMessage(xPlayer, 'success')
         if xPlayer.getJob().name == job then
             SendMessage(xPlayer, 'inform')
