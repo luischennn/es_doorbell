@@ -26,13 +26,13 @@ Config.Bells = {
     {
         coords = vec3(433.6991, -985.7689, 30.7095),
         job = 'police',
-        label = 'Poliisi'
+        label = 'Police'
     },
 
     {
         coords = vec3(297.9773, -587.2928, 43.2609),
         job = 'ambulance',
-        label = 'Ensihoito'
+        label = 'Ambulance'
     }           
 
 }
