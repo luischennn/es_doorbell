@@ -1,17 +1,12 @@
 ESX = exports["es_extended"]:getSharedObject()
 
 RegisterNetEvent('es_doorbell:NotifyJob')
-AddEventHandler('es_doorbell:NotifyJob', function(job)
+AddEventHandler('es_doorbell:NotifyJob', function(pJob)
 
-    local xPlayers = ESX.GetPlayers()
+    local xPlayers = ESX.GetExtendedPlayers('job', pJob)
 
-    for i=1, #xPlayers, 1 do
-        local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
-        TriggerClientEvent('ox_lib:notify', xPlayer.source, {title = Config.Bell, description = Config.YouRang, duration = 5000, type = 'success'})
-      
-        if xPlayer.getJob().name == job then
-            TriggerClientEvent('ox_lib:notify', xPlayer.source, {title = Config.Bell, description = Config.SomeoneRang, duration = 5000, type = 'inform'})
-        end
+    for i, xPlayer in ipairs(xPlayers) do
+        TriggerClientEvent('ox_lib:notify', xPlayer.source, {title = Config.Bell, description = Config.SomeoneRang, duration = 5000})
     end
 
 end)
